@@ -71,19 +71,24 @@ def send_wrapped_email(user_data: Dict, recipient_email: str) -> bool:
         # Sanitize user data to prevent template injection and ensure reasonable lengths
         # (I don't think I need this but I'll keep it in anyways)
         sanitized_data = {
-            key: str(value).strip()[:1000] for key, value in user_data.items()
+            key: str(value).strip()[:1000] if isinstance(value, (str, int, float)) else value
+            for key, value in user_data.items()
             # strip() removes leading/trailing whitespace
             # [:1000] ensures no value is longer than 1000 characters
         }
 
-        # Render email body with sanitized data
-        email_body = template.render(**sanitized_data)
-
-        # Configure email message with proper headers
-        msg = MIMEText(email_body)
+        # Create message container for HTML email
+        msg = MIMEMultipart('alternative')
         msg['Subject'] = "Your Fall 2024 Union Central Wrapped!"
         msg['From'] = sender_email
         msg['To'] = recipient_email
+
+        # Render HTML email body with sanitized data
+        html_body = template.render(**sanitized_data)
+        
+        # Create and attach HTML part
+        html_part = MIMEText(html_body, 'html')
+        msg.attach(html_part)
 
         # Use 'with' statement for proper cleanup of SMTP connection
         with smtplib.SMTP(smtp_server, port) as server:
@@ -165,12 +170,12 @@ if __name__ == "__main__":
                 "total_rentals": 4
             },
             {
-                "name": "FIFA 24",
+                "name": "FIFA 23",
                 "total_minutes": 150,
                 "total_rentals": 3
             },
             {
-                "name": "NBA 2K24",
+                "name": "NBA 2K22",
                 "total_minutes": 90,
                 "total_rentals": 2
             }
