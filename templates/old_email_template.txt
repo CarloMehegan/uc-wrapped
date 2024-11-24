@@ -1,0 +1,32 @@
+Hi {{ name }},
+
+This is your Fall 2024 Union Central Wrapped!
+
+You rented from Union Central {{ total_rentals }} times this semester! Out of 1000 unique renters, you place {{ total_rental_ranking }} (ex. 1st, 2nd, 345th, ...).
+
+{% if fav_rental_type %}
+##### Table games (pool, air hockey, foosball, shuffleboard)
+Your favorite rental item was {{ fav_rental_type }}, which you rented {{ fav_rental_type_count }} times. Out of 300 unique {{ fav_rental_type }} renters, you place {{ fav_rental_type_ranking }}. Your average session was {{ fav_rental_type_duration_average }} minutes, and you played approximately {{ fav_rental_type_duration_total }} minutes of {{ fav_rental_type }} this semester!
+{% if fav_table %}
+Your favorite pool table was: {{ fav_table }}, which you rented {{ fav_table_count }} times.
+{% endif %}
+{% endif %}
+
+{% if fav_console %}
+##### Video games
+Your favorite console was {{ fav_console }}. You rented it {{ fav_console_count }} times. Out of 100 unique {{ fav_console }} renters, you place {{ fav_console_ranking }}. Your average session was {{ fav_console_duration_average }} minutes, and you played approximately {{ fav_console_duration_total }} minutes on the {{ fav_console }} this semester!
+
+Because our Xbox and Playstation games are physical, we have data on those too! Here are your top video games (Switch games are all recorded as "Switch game" because they're digital):
+{% for game in top_games %}
+- {{ loop.index }}. {{ game.name }}, {{ game.total_minutes }} minutes, {{ game.total_rentals }} total rentals.
+{% endfor %}
+{% endif %}
+
+{% if fav_board %}
+##### Board games
+Your favorite board game was {{ fav_board }}. You rented it {{ fav_board_count }} times. Out of 100 unique {{ fav_board }} renters, you place {{ fav_board_ranking }}. Your average session was {{ fav_board_duration_average }} minutes, and you played approximately {{ fav_board_duration_total }} minutes of {{ fav_board }} this semester!
+{% endif %}
+
+Thanks for being a part of the first UC Wrapped! Share with your friends and compare stats!
+
+The creation and sending of this email was automated by Carlo Mehegan, UC Area Supervisor using Python scripts. Data is not 100% accurate. Rentals may have been recorded incorrectly, or the data may have been processed incorrectly. If your stats seem off, send me a message at cjmehegan@wm.edu!
